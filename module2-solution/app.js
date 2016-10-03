@@ -39,7 +39,7 @@ function ShoppingListCheckOffService() {
 		quantity: 5
 	}
 	var candy = {
-		name: "candies",
+		name: "candies", 
 		quantity: 6
 	};
 	var book = {

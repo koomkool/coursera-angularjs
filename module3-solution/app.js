@@ -31,13 +31,16 @@ NarrowItDownController.$inject = ['MenuSearchService'];
 function NarrowItDownController(MenuSearchService) {
   var narrowItDown = this;  
   
+  narrowItDown.searchTerm = '';
   narrowItDown.getMatchedMenuItems = function () {
-    MenuSearchService.getMatchedMenuItems(narrowItDown.searchTerm)
-    .then(function (foundItems) {
-      narrowItDown.found = foundItems;
-    }, function() {
-      narrowItDown.found = [];
-    });
+  	if (narrowItDown.searchTerm == '') {
+  		narrowItDown.found = [];
+  	} else {
+  		MenuSearchService.getMatchedMenuItems(narrowItDown.searchTerm)
+  		.then(function (foundItems) {
+      		narrowItDown.found = foundItems;
+    	});
+  	}
   }
 
   narrowItDown.removeItem = function(index) {
@@ -45,14 +48,11 @@ function NarrowItDownController(MenuSearchService) {
   }
 };
 
-MenuSearchService.$inject = ['$http', 'ApiBasePath', '$q']
-function MenuSearchService($http, ApiBasePath, $q) {
+MenuSearchService.$inject = ['$http', 'ApiBasePath']
+function MenuSearchService($http, ApiBasePath) {
   var service = this;
 
   service.getMatchedMenuItems = function (searchTerm) {
-    if (!searchTerm) {
-      return $q.reject();
-    }   
 
     return $http
       .get(ApiBasePath + '/menu_items.json')
